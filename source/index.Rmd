@@ -1,0 +1,40 @@
+---
+title: "Black vs. White Jailing Proportions"
+output: html_document
+---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("analysis.R")
+library(ggplot2)
+```
+
+In recent years, it has become widely known that black people are incarcerated disproportionately to white people. Given the Vera Institute's incarceration data, I will use their counts of the total populations of black and white people aged 15 to 64 and their counts of black and white people in jail to test the disproportionality of black and white incarcerations. I will specifically be studying jailings in King County, Washington as I am curious to know if this injustice held true in the area where I am currently living.
+
+I calculated the proportion of black people to white people living in King County in 2018 to be `r tot_prop_king_2018`. In contrast, I found that the proportion of jailed black people to jailed white people in King County in 2018 to be `r jail_prop_king_2018`. Since the latter number is much larger than the former, we know that, even as recent as 2018, black people were jailed disproportionately to white people. This is further supported by the fact that `r percent_in_jail_black` percent of black people in King County were in jail in 2018, whereas a far smaller `r percent_in_jail_white` percent of white King County residents were in jail that same year. To further prove this point, I found that the mean proportion of black people to white people in King County is `r avg_pop_prop`, while the mean proportion of white people to black people in King County jails is `r avg_jailed_prop`. Each of my calculations to go show that, even in the left-leaning King County, disproportionate jailing between white and black people is still a massive issue.
+
+The following is a chart showing the proportion of black people to white people in King County jails, as well as the proportion of black people to white people aged 15 to 64 in King County. I chose a scatter plot to illustrate how these proportions have changed over time. This chart reveals that, since 1990, the proportion of black people to white people in jail has been consistently higher than the proportion of black adults to white adults.
+
+```{r, echo = FALSE, message = FALSE}
+ggplot(data = chart_df) +
+  geom_point(mapping = aes(x = years_recorded, y = jail_prop_king))+
+  geom_smooth(method = lm, se = FALSE, mapping = aes(x = years_recorded, y = jail_prop_king, color = "In Jail")) +
+  geom_point(mapping = aes(x = years_recorded, y = tot_prop_king))+
+  geom_smooth(method = lm, se = FALSE, mapping = aes(x = years_recorded, y = tot_prop_king, color = "Overall")) +
+  labs(title = "Proportion of Black to White People in King County Overall and in Jail since 1990", x = "Year", y = "Proportion of Black to White People", color = "Proportion of People")+
+  ylim(0, 1)
+```
+
+This chart plots the percent of black people in jail against the percent of white people in jail in King County. I chose a scatter plot in order to show as many years on my chart as the data set would allow so that I could better illustrate the relationship between the two variables. The data points represent years since 1990, all of which fall near the bottom of the graph. Since the x and y axes use the same scales of 0 to 1.75, this indicates that the percent of black people in jail is significantly higher than the percent of white people in jail.
+
+```{r, echo = FALSE, message = FALSE}
+ggplot(data = chart2_df) +
+  geom_point(mapping = aes(x = all_percent_in_jail_black, y = all_percent_in_jail_white))+
+  labs(title = "Percent of Black People in Jail vs. White People in Jail in King County Since 1990", x = "Percent of Black People in Jail", y = "Percent of White People in Jail")+
+  ylim(0, 1.75)+
+  xlim(0, 1.75)
+```
+
+This map of Washington State visualizes the difference between the proportion of black people aged 15 to 64 to white people aged 15 to 64 and the proportion of black people to white people in jail, all in 2018. Counties represented in yellow have a fairly negligible difference between these two proportions, whereas, counties in red have a massive difference. Therefore, since King County is red, it has by far the greatest disparity of any Washington State county. While the state's other counties may not see as many disproportionate incarcerations, the difference between the proportions at least slightly above zero in all counties, therefore showing that black people are jailed disproportionately to white people.
+```{r, echo = FALSE, message = FALSE}
+cases_map
+```
